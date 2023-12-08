@@ -43,4 +43,4 @@ class FieldTypeEnum(str, enum.Enum):
         if self is FieldTypeEnum.BOOL:
             return bool()
         if self is FieldTypeEnum.LIST:
-            return list()
+            return []

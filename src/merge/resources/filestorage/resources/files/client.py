@@ -223,14 +223,13 @@ class FilesClient:
             - id: str.
         """
         with self._client_wrapper.httpx_client.stream(
-            "GET",
-            urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/filestorage/v1/files/{id}/download"),
-            headers=self._client_wrapper.get_headers(),
-            timeout=60,
-        ) as _response:
+                "GET",
+                urllib.parse.urljoin(f"{self._client_wrapper.get_base_url()}/", f"api/filestorage/v1/files/{id}/download"),
+                headers=self._client_wrapper.get_headers(),
+                timeout=60,
+            ) as _response:
             if 200 <= _response.status_code < 300:
-                for _chunk in _response.iter_bytes():
-                    yield _chunk
+                yield from _response.iter_bytes()
                 return
             _response.read()
             try:

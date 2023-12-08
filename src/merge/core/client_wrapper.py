@@ -29,10 +29,7 @@ class BaseClientWrapper:
         return headers
 
     def _get_api_key(self) -> str:
-        if isinstance(self._api_key, str):
-            return self._api_key
-        else:
-            return self._api_key()
+        return self._api_key if isinstance(self._api_key, str) else self._api_key()
 
     def get_base_url(self) -> str:
         return self._base_url
