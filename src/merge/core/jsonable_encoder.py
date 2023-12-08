@@ -44,10 +44,9 @@ def jsonable_encoder(obj: Any, custom_encoder: Optional[Dict[Any, Callable[[Any]
     if custom_encoder:
         if type(obj) in custom_encoder:
             return custom_encoder[type(obj)](obj)
-        else:
-            for encoder_type, encoder_instance in custom_encoder.items():
-                if isinstance(obj, encoder_type):
-                    return encoder_instance(obj)
+        for encoder_type, encoder_instance in custom_encoder.items():
+            if isinstance(obj, encoder_type):
+                return encoder_instance(obj)
     if isinstance(obj, pydantic.BaseModel):
         encoder = getattr(obj.__config__, "json_encoders", {})
         if custom_encoder:
@@ -79,11 +78,7 @@ def jsonable_encoder(obj: Any, custom_encoder: Optional[Dict[Any, Callable[[Any]
                 encoded_dict[encoded_key] = encoded_value
         return encoded_dict
     if isinstance(obj, (list, set, frozenset, GeneratorType, tuple)):
-        encoded_list = []
-        for item in obj:
-            encoded_list.append(jsonable_encoder(item, custom_encoder=custom_encoder))
-        return encoded_list
-
+        return [jsonable_encoder(item, custom_encoder=custom_encoder) for item in obj]
     if type(obj) in pydantic.json.ENCODERS_BY_TYPE:
         return pydantic.json.ENCODERS_BY_TYPE[type(obj)](obj)
     for encoder, classes_tuple in encoders_by_class_tuples.items():
@@ -93,8 +88,7 @@ def jsonable_encoder(obj: Any, custom_encoder: Optional[Dict[Any, Callable[[Any]
     try:
         data = dict(obj)
     except Exception as e:
-        errors: List[Exception] = []
-        errors.append(e)
+        errors: List[Exception] = [e]
         try:
             data = vars(obj)
         except Exception as e:

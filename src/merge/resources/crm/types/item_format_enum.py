@@ -43,4 +43,4 @@ class ItemFormatEnum(str, enum.Enum):
         if self is ItemFormatEnum.BOOL:
             return bool()
         if self is ItemFormatEnum.LIST:
-            return list()
+            return []

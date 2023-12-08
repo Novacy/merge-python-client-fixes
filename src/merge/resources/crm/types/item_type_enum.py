@@ -43,4 +43,4 @@ class ItemTypeEnum(str, enum.Enum):
         if self is ItemTypeEnum.BOOL:
             return bool()
         if self is ItemTypeEnum.LIST:
-            return list()
+            return []

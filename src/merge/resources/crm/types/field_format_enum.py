@@ -43,4 +43,4 @@ class FieldFormatEnum(str, enum.Enum):
         if self is FieldFormatEnum.BOOL:
             return bool()
         if self is FieldFormatEnum.LIST:
-            return list()
+            return []
